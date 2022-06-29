@@ -58,20 +58,22 @@ if err != nil {
 ```
 ## 支持校验方式及说明 Support verification methods and descriptions
 
-| 校验方式     | 适用字段类型                               | 样式                          | 说明                                                                                  |
-|:---------|:-------------------------------------|:----------------------------|:------------------------------------------------------------------------------------|
-| required | string number struct slice array ptr | required                    | 验证非0值或非空字符串或指针nil,如果可能包含0值或空字符串,可使用ptr                                              |                 
-| enum     | string number ptr                    | enum[1,2,3]<br/>enum[a,B,c] | 输入在指定的值中                                                                            |           
-| min      | string number ptr                    | min[10]                     | string最小长度(会去除前后空白进行验证)<br/>number最小值                                               |             
-| max      | string number ptr                    | max[1024]                   | string最大长度(会去除前后空白进行验证)<br/>number最大值                                               |                 
-| range    | string number ptr                    | range[0:10]                 | 长度在指定的范围内,会去除前后空白进行验证                                                               |
-| regex    | string ptr(*string)                  | regex[pwd]<br/>regex[自定义正则] | 验证是否符合正则规范可以自定义或使用预制:<br/>pwd，pwdH，pwdHS，email，phone，phoneCN，phone，id，dt，date，ts，ip |## 支持校验方式及说明
+| 校验方式     | 适用字段类型                               | 样式                                     | 说明                                                                                  |
+|:---------|:-------------------------------------|:---------------------------------------|:------------------------------------------------------------------------------------|
+| required | string number struct slice array ptr | required                               | 验证非0值或非空字符串或指针nil,如果可能包含0值或空字符串,可使用ptr                                              |                 
+| enum     | string number ptr                    | enum[1,2,3]<br/>enum[a,B,c]            | 输入在指定的值中                                                                            |           
+| min      | string number ptr                    | min[10]                                | string最小长度(会去除前后空白进行验证)<br/>number最小值                                               |             
+| max      | string number ptr                    | max[1024]                              | string最大长度(会去除前后空白进行验证)<br/>number最大值                                               |                 
+| range    | string number ptr                    | range[0:10]                            | 长度在指定的范围内,会去除前后空白进行验证                                                               |
+| regex    | string ptr(*string)                  | regex[pwd]<br/>regex[自定义正则]            | 验证是否符合正则规范可以自定义或使用预制:<br/>pwd，pwdH，pwdHS，email，phone，phoneCN，phone，id，dt，date，ts，ip |## 支持校验方式及说明
+| arr      | ptr(*slice) slice ptr(*array) array  | arr[10,20]<br/>arr[-,20]<br/>arr[10,-] | 验证数组长度范围，可使用-表示忽略数组上或者下边界                                                           |
 
-| Validation Method | Applicable Field Type                | Style                                | Description                                                                                                                                             |
-|:------------------|:-------------------------------------|:-------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| required          | string number struct slice array ptr | required                             | validate non-zero value or non-empty string or pointer nil, if it may contain 0 value or empty string, use ptr                                          |                 
-| enum              | string number ptr                    | enum[1,2,3]<br/>enum[a,B,c]          | Enter in the specified value                                                                                                                            |           
-| min               | string number ptr                    | min[10]                              | string: Minimum length (the leading and trailing blanks will be removed for verification)<br/>number: minimum                                           |             
-| max               | string number ptr                    | max[1024]                            | string: Maximum length (the leading and trailing blanks will be removed for verification)<br/>number: maximum                                           |                 
-| range             | string number ptr                    | range[0:10]                          | If the length is within the specified range, the leading and trailing blanks will be removed for verification.                                          |
-| regex             | string ptr(*string)                  | regex[pwd]<br/>regex[custom regular] | Validation for compliance with regular specifications can be customized or prefabricated:<br/>pwd，pwdH，pwdHS，email，phone，phoneCN，phone，id，dt，date，ts，ip |
+| Validation Method | Applicable Field Type                | Style                                  | Description                                                                                                                                             |
+|:------------------|:-------------------------------------|:---------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| required          | string number struct slice array ptr | required                               | validate non-zero value or non-empty string or pointer nil, if it may contain 0 value or empty string, use ptr                                          |                 
+| enum              | string number ptr                    | enum[1,2,3]<br/>enum[a,B,c]            | Enter in the specified value                                                                                                                            |           
+| min               | string number ptr                    | min[10]                                | string: Minimum length (the leading and trailing blanks will be removed for verification)<br/>number: minimum                                           |             
+| max               | string number ptr                    | max[1024]                              | string: Maximum length (the leading and trailing blanks will be removed for verification)<br/>number: maximum                                           |                 
+| range             | string number ptr                    | range[0:10]                            | If the length is within the specified range, the leading and trailing blanks will be removed for verification.                                          |
+| regex             | string ptr(*string)                  | regex[pwd]<br/>regex[custom regular]   | Validation for compliance with regular specifications can be customized or prefabricated:<br/>pwd，pwdH，pwdHS，email，phone，phoneCN，phone，id，dt，date，ts，ip |
+| arr               | ptr(*slice) slice ptr(*array) array  | arr[10,20]<br/>arr[-,20]<br/>arr[10,-] | Validate the length range of the array, you can use - to ignore the upper or lower bounds of the array                                                  |
