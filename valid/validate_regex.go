@@ -8,22 +8,20 @@ import (
 )
 
 //some simple RE
-var regexpMap map[string]string
+var regexpMap map[string]func(string) bool
 
 func init() {
-	regexpMap = map[string]string{
-		"pwd":     `^[\w_.,]+$`,                                                                         //简单密码(只能包含字母、数字和下划线)
-		"pwdH":    `^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]$`,                                        //强密码(必须包含大小写字母和数字的组合，不能使用特殊字符)
-		"pwdHS":   `^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).$`,                                                  //强密码(必须包含大小写字母和数字的组合，可以使用特殊字符)
-		"email":   `^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`,                                      //强密码(必须包含大小写字母和数字的组合，可以使用特殊字符)
-		"phone":   `^[0-9]{9,13}$`,                                                                      //手机号
-		"phoneCN": `^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$`,       //手机号(china)
-		"phone+":  `^\+[0-9]{9,13}$`,                                                                    //手机号带+0112345678901
-		"id":      `(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)`,                                           //证件号
-		"dt":      `^\d{4}(-)(1[0-2]|0?\d)(-)([0-2]\d|0+\d|30|31)\s+(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$`, //日期时间2006-01-02 15:04:05
-		"date":    `^\d{4}(-)(1[0-2]|0?\d)(-)([0-2]\d|0+\d|30|31)$`,                                     //日期2006-01-02
-		"ts":      `^[a-zA-Z]+/[a-zA-Z]+$`,                                                              //时区Asia/Shanghai
-		"ip":      `((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}`,      //IP
+	regexpMap = map[string]func(string) bool{
+		"pwd":     regexp.MustCompile(`^[\w_.,]+$`).MatchString,                                                                         //简单密码(只能包含字母、数字和下划线)
+		"email":   regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString,                                      //邮箱
+		"phone":   regexp.MustCompile(`^[0-9]{9,13}$`).MatchString,                                                                      //手机号
+		"phoneCN": regexp.MustCompile(`^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$`).MatchString,       //手机号(china)
+		"phone+":  regexp.MustCompile(`^\+[0-9]{9,13}$`).MatchString,                                                                    //手机号带+0112345678901
+		"id":      regexp.MustCompile(`(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)`).MatchString,                                           //证件号
+		"dt":      regexp.MustCompile(`^\d{4}(-)(1[0-2]|0?\d)(-)([0-2]\d|0+\d|30|31)\s+(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$`).MatchString, //日期时间2006-01-02 15:04:05
+		"date":    regexp.MustCompile(`^\d{4}(-)(1[0-2]|0?\d)(-)([0-2]\d|0+\d|30|31)$`).MatchString,                                     //日期2006-01-02
+		"ts":      regexp.MustCompile(`^[a-zA-Z]+/[a-zA-Z]+$`).MatchString,                                                              //时区Asia/Shanghai
+		"ip":      regexp.MustCompile(`((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}`).MatchString,      //IP
 	}
 }
 
@@ -33,7 +31,7 @@ type validateRegex struct {
 }
 
 func (m *validateRegex) validate() (result bool) {
-	if strings.EqualFold(m.condition, "[]") {
+	if strings.EqualFold(m.condition, "regex[]") {
 		fmt.Println("Incorrect Expression:", m.fieldT.Name, m.condition)
 		return
 	}
@@ -54,12 +52,9 @@ func (m *validateRegex) Regex(cond string) (result bool) {
 		val := strings.TrimSpace(m.fieldE.String())
 		re, ok := regexpMap[cond]
 		if !ok {
-			re = cond
+			re = regexp.MustCompile(cond).MatchString
 		}
-		ok, err := regexp.MatchString(re, val)
-		if err != nil {
-			fmt.Println(err)
-		}
+		ok = re(val)
 		if ok {
 			result = true
 		}

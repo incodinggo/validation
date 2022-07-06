@@ -19,8 +19,8 @@ func TestRegex(t *testing.T) {
 		C int16             `valid:"regex[10]#3"`
 		D int32             `valid:"regex[10]#3"`
 		E int64             `valid:"regex[10]#3"`
-		F string            `valid:"regex[pwd]#3"`
-		G *string           `valid:"regex[pwd]#3"`
+		F string            `valid:"regex[^[1-2]\d*$]#3"`
+		G *string           `valid:"regex[email]#3"`
 		H *int              `valid:"regex[pwd]#3"`
 		I []int             `valid:"regex[10]#3"`
 		J *[]int            `valid:"regex[10]#3"`
