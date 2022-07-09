@@ -20,11 +20,10 @@ type Example struct {
     F string            `valid:"required#1;range[1,99]#4"`
     G *string           `valid:"required#1;range[0:8]#4"`
     H *int              `valid:"required#1;range[0:8]#5"`
-    I []int             `valid:"required#1"`    //unsupported others method
-    J *[]int            `valid:"required#1"`    //unsupported others method
-    K []string          `valid:"required#1"`    //unsupported others method
-    L []*string         `valid:"required#1"`    //unsupported others method
-    M struct{ M1 int }  `valid:"required#1"`    //unsupported others method
+    I []int             `valid:"required#1"`    
+    J *[]int            `valid:"required#1"`    
+    K []string          `valid:"required#1"`    
+    L []*string         `valid:"required#1"`    
     N *struct{ M1 int } `valid:"required#1"`    //unsupported others method
 }
 ```
